@@ -1,52 +1,75 @@
-// As a user, i should see the timer increment every second once the page has loaded
-// As a user, i can manually increment and decrement the counter as i like
-// As a user, i can like an individual number of the counter. I should see the appropriate number of likes associated with that particular number
-// As a user I can pause the game, which should disable all buttons except the pause button, which should now show the text 'resume'
-// As a user I can leave comments on my gameplay, such as "Wow, what a fun game this is"
+let counterOn = true
+let count = 0
+let likes = {}
 
-let timer = true
-let ul = document.createElement('ul')
-document.querySelector('#list').append(ul)
-setInterval(function(){
-    if(timer){
-      document.querySelector('#counter').innerText = parseInt(document.querySelector('#counter').innerText) + 1
-    }
-  } , 1000)
+function Counter(){
+  setInterval(function(){
+      if(counterOn){
+        count+=1
+        document.querySelector('#counter').innerText = count
+      }
+    } , 1000)
+}
 
-document.querySelector('#minus').addEventListener('click', function(){
-  document.querySelector('#counter').innerText = parseInt(document.querySelector('#counter').innerText) - 1
-})
+function minusButton(){
+   document.querySelector('#minus').addEventListener('click', function(){
+    count-=1
+    document.querySelector('#counter').innerText = count
+  })
+}
 
-document.querySelector('#plus').addEventListener('click', function(){
-  document.querySelector('#counter').innerText = parseInt(document.querySelector('#counter').innerText) + 1
-})
+function plusButton(){
+ document.querySelector('#plus').addEventListener('click', function(){
+    count+=1
+    document.querySelector('#counter').innerText = count
+  })
+}
 
+function pauseButton(){
+  document.querySelector('#pause').addEventListener('click', function(){
+     counterOn = !(counterOn)
+     if (counterOn) {
+       document.querySelector('#pause').innerText = 'pause'
+       document.querySelector('#minus').disabled = false
+       document.querySelector('#plus').disabled = false
+       document.querySelector('#heart').disabled = false
+     } else {
+       document.querySelector('#pause').innerText = 'resume'
+       document.querySelector('#minus').disabled = true
+       document.querySelector('#plus').disabled = true
+       document.querySelector('#heart').disabled = true
+     }
+   })
+}
 
-document.querySelector('#heart').addEventListener('click', function(){
-  const counter = document.querySelector('#counter').innerText
-  const like = document.createElement('li')
-  like.innerText = `You have liked number ${counter}:times`
-  document.querySelector('.likes').append(like)
-})
+function heartButton(){
+  document.querySelector('#heart').addEventListener('click', function() {
+    !(likes[count]) ? likes[count] = 0 : null
+    likes[count] += 1
+    let li = document.createElement('li')
+    li.innerText = `You liked the number ${count} ${likes[count]} time(s).`
+    document.querySelector('#list').append(li)
+  })
+}
 
-document.querySelector('#pause').addEventListener('click', function(){
-  if (timer) {
-  document.querySelector('#minus').disabled = true
-  document.querySelector('#plus').disabled = true
-  document.querySelector('#heart').disabled = true
-  timer = false
-  document.querySelector('#pause').innerText = 'resume'
-  } else {
-  document.querySelector('#minus').disabled = false
-  document.querySelector('#plus').disabled = false
-  document.querySelector('#heart').disabled = false
-  timer = true
-  document.querySelector('#pause').innerText = 'pause'
-  }
-})
+function submitButton() {
+  document.querySelector('#comment-form').addEventListener('submit', function(e){
+    e.preventDefault()
 
-document.querySelector('#submit').addEventListener('click', function(e){
-  let li = document.createElement('li')
-  li.innerText = document.querySelector('#input').value
-  ul.append(li)
-})
+    let li = document.createElement('li')
+    li.innerText = document.querySelector('#input').value
+    document.querySelector('#input').value = ''
+    document.querySelector('#real-list').append(li)
+  })
+}
+
+function startApp(){
+  Counter()
+  minusButton()
+  plusButton()
+  pauseButton()
+  heartButton()
+  submitButton()
+}
+
+startApp()
