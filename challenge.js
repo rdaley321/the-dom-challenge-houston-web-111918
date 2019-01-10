@@ -5,7 +5,7 @@ let likes = {}
 function Counter(){
   setInterval(function(){
       if(counterOn){
-        count+=1
+        count++
         document.querySelector('#counter').innerText = count
       }
     } , 1000)
@@ -13,21 +13,21 @@ function Counter(){
 
 function minusButton(){
    document.querySelector('#minus').addEventListener('click', function(){
-    count-=1
+    count--
     document.querySelector('#counter').innerText = count
   })
 }
 
 function plusButton(){
  document.querySelector('#plus').addEventListener('click', function(){
-    count+=1
+    count++
     document.querySelector('#counter').innerText = count
   })
 }
 
 function pauseButton(){
   document.querySelector('#pause').addEventListener('click', function(){
-     counterOn = !(counterOn)
+     counterOn = !counterOn
      if (counterOn) {
        document.querySelector('#pause').innerText = 'pause'
        document.querySelector('#minus').disabled = false
@@ -45,7 +45,7 @@ function pauseButton(){
 function heartButton(){
   document.querySelector('#heart').addEventListener('click', function() {
     !(likes[count]) ? likes[count] = 0 : null
-    likes[count] += 1
+    likes[count]++
     let li = document.createElement('li')
     li.innerText = `You liked the number ${count} ${likes[count]} time(s).`
     document.querySelector('#list').append(li)
